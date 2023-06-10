@@ -22,7 +22,7 @@ class QuasselGrepHandler(BaseRequestHandler):
 			socket.close()
 			return
 
-		salt = urandom(32).encode('hex')
+		salt = codecs.encode(urandom(32), 'hex')
 		socket.sendall(b'SALT=%s\n' % (salt))
 
 		option_list = []
