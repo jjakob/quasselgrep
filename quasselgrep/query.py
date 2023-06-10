@@ -56,6 +56,11 @@ class Query(object):
 				self.fromtime = timerange[0].strftime('%s')
 				self.totime = timerange[1].strftime('%s')
 
+				#Newer sqlite versions have timestamps in milliseconds.
+				if options.sqlite_version >= 31:
+					self.fromtime = int(self.fromtime) * 1000
+					self.totime = int(self.totime) * 1000
+
 		if options.inclusive:
 			self.msg_types = (MSG, NOTICE, ACTION, NICK, MODE, JOIN, PART, QUIT, KICK, TOPIC, INVITE, SPLITJOIN, SPLITQUIT)
 		else:
@@ -134,7 +139,11 @@ class Query(object):
 		if self.options.db_type == 'postgres':
 			columns.append('backlog.time::timestamp(0)')
 		elif self.options.db_type == 'sqlite':
-			columns.append("datetime(backlog.time, 'unixepoch') as time")
+			#Newer sqlite versions have timestamps in milliseconds.
+			if self.options.sqlite_version >= 31:
+				columns.append("datetime(backlog.time / 1000, 'unixepoch') as time")
+			else:
+				columns.append("datetime(backlog.time, 'unixepoch') as time")
 		columns += ["backlog.type", "backlog.message", "sender.sender", "buffer.buffername", "network.networkname"]
 
 		return columns
