@@ -3,6 +3,8 @@ quasselgrep
 
 Tool for searching quassel logs from the commandline
 
+This is a fork of the original [fish-face/quasselgrep](https://github.com/fish-face/quasselgrep) that merges existing pull requests, removes backwards compatibility to old Python versions, and continues maintenance. Pull requests will be reviewed and bugs fixed. No other work is planned.
+
 [![Packaging status](https://repology.org/badge/tiny-repos/quasselgrep.svg)](https://repology.org/project/quasselgrep/versions)
 [Gentoo overlay](https://github.com/jjakob/gentoo-overlay/net-irc/quasselgrep)
 
