@@ -54,8 +54,8 @@ class Query(object):
 				self.fromtime = timerange[0].strftime('%s')
 				self.totime = timerange[1].strftime('%s')
 
-				#Newer sqlite versions have timestamps in milliseconds.
-				if options.sqlite_version >= 31:
+				# Quassel schemaversion >=31 has timestamps in milliseconds.
+				if options.schemaversion >= 31:
 					self.fromtime = int(self.fromtime) * 1000
 					self.totime = int(self.totime) * 1000
 
@@ -139,8 +139,8 @@ class Query(object):
 		if self.options.db_type == 'postgres':
 			columns.append('backlog.time::timestamp(6)')
 		elif self.options.db_type == 'sqlite':
-			#Newer sqlite versions have timestamps in milliseconds.
-			if self.options.sqlite_version >= 31:
+			# Quassel schemaversion >=31 has timestamps in milliseconds.
+			if self.options.schemaversion >= 31:
 				columns.append("backlog.time / 1000 AS time")
 			else:
 				columns.append("backlog.time AS time")
