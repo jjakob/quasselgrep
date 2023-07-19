@@ -141,9 +141,9 @@ class Query(object):
 		elif self.options.db_type == 'sqlite':
 			#Newer sqlite versions have timestamps in milliseconds.
 			if self.options.sqlite_version >= 31:
-				columns.append("datetime(backlog.time / 1000, 'unixepoch') as time")
+				columns.append("backlog.time / 1000 AS time")
 			else:
-				columns.append("datetime(backlog.time, 'unixepoch') as time")
+				columns.append("backlog.time AS time")
 		columns += ["backlog.type", "backlog.message", "sender.sender", "buffer.buffername", "network.networkname"]
 
 		return columns
@@ -308,7 +308,11 @@ class Query(object):
 				ctxt_for = result[7]
 
 			#Extract data we care about
-			time = result[1]
+			if self.options.db_type == 'postgres':
+				time = result[1]
+			elif self.options.db_type == 'sqlite':
+				time = datetime.fromtimestamp(result[1])
+
 			type = result[2]
 			message = result[3]
 			try:
